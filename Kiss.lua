@@ -52,8 +52,8 @@ windower.register_event('prerender', function(...)
 	if not enabled then return end
 	
 	if os.clock() - lastCheck > 0.5 then
-		if windower.ffxi.get_ability_recasts()[72] == 0 then --ほんきだせ
-			 windower.send_command(windower.to_shift_jis('input /pet "'..WS_NAME..'" <bt>'))
+		if windower.ffxi.get_ability_recasts()[102] == 0 then --ほんきだせ
+			 windower.send_command(windower.to_shift_jis('input /pet "'..WS_NAME..'" <me>'))
 		end
 		lastCheck = os.clock()
 	end
