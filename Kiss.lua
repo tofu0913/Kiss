@@ -28,15 +28,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 _addon.name = 'Kiss'
 _addon.author = 'Cliff'
-_addon.version = '1.0.0'
+_addon.version = '1.1.0'
 _addon.commands = {'kiss'}
 
 require('logger')
 
 local enabled = false
 local lastCheck = os.clock()
-
-local WS_NAME = "TP吸収キッス"
 
 windower.register_event('addon command', function(command, ...)
     if command =="start" then
@@ -52,8 +50,17 @@ windower.register_event('prerender', function(...)
 	if not enabled then return end
 	
 	if os.clock() - lastCheck > 0.5 then
-		if windower.ffxi.get_ability_recasts()[102] == 0 then --ほんきだせ
-			 windower.send_command(windower.to_shift_jis('input /pet "'..WS_NAME..'" <me>'))
+		pet = windower.ffxi.get_mob_by_target('pet')
+		bt = windower.ffxi.get_mob_by_target('bt')
+		if not bt then
+			return
+		
+		elseif not pet or (pet and pet.hpp == 0) then
+			windower.send_command(windower.to_shift_jis('wait 1; input /ja "よびだす" <me>;'))
+			
+		elseif windower.ffxi.get_ability_recasts()[102] == 0 and windower.ffxi.get_ability_recasts()[100] == 0 then --ほんきだせ and たたかえ
+			windower.send_command(windower.to_shift_jis('input /pet "たたかえ" <bt>; wait 1; input /pet "ほんきだせ" <me>; wait 1; input /pet "まってろ" <me>;'))
+			
 		end
 		lastCheck = os.clock()
 	end
